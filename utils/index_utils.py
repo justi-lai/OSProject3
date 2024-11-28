@@ -18,27 +18,29 @@ class Index_File:
     
     def read_from_location(self, location):
         return self.read_from_file(location * NODE_SIZE)
+    
+    def find_node_location(self, node_id):
+        with open(self.file, 'rb') as file:
+            file.read(512)
+            # TO BE CONTINUED... trying to find the node location in the file by just searching for node_id in each 512 space.
 
     def check_memory(self, field, value):
         for i in range(len(self.memory)):
             if self.memory[i][field] == value:
                 return i
         return None
+    
+    def read(self, attribute, value, location):
+        check = self.check_memory(attribute, value)
+        if check is not None:
+            return self.memory[check]
+        else:
+            return self.read_from_location(location)
 
     def get_header(self):
-        check = self.check_memory('header', True)
-        if check is not None:
-            return self.memory[check]
-        else:
-            header = self.read_from_file(0)
-            return header
-
+        return self.read('header', True, 0)
 
     def get_root(self):
-        check = self.check_memory('parent_id', 0)
-        if check is not None:
-            return self.memory[check]
-        else:
-            header = self.get_header()
-            root_location = int.from_bytes(header['root'], 'big')
+        header = self.get_header()
+        root_id = int.from_bytes(header['root'], 'big')
 
