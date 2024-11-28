@@ -16,3 +16,6 @@
 
 11/28   01:24:  Just wanted to start on making reading from the file in index_utils.py a little easier by not having to check if things are in memory every time in each method,
                 instead just putting it in the read function.
+
+11/28   16:00:  I want to finish the implementation of index_utils.py in this session, or get close to it so that I can start working on the functionality of the B-Tree soon. It is 
+                also Thanksgiving today though so I might not have enough time today. I haven't really had any thoughts about the project since last night.
