@@ -1,15 +1,16 @@
 MAGIC_NUMBER = "4337PRJ3"
+NODE_SIZE = 512
 
 class Node_File:
     def __init__(self, location=0, file_path=None, data=None):
-        self.location = location
+        self.location = location * NODE_SIZE
         self.file_path = file_path
         self.data = data
     
     def write(self):
         if self.data is None:
             raise ValueError("No data to write")
-        if len(self.data) != 512:
+        if len(self.data) != NODE_SIZE:
             raise ValueError("Data length should be 512 bytes")
         if self.file_path is None:
             raise ValueError("No file path provided")
@@ -23,7 +24,7 @@ class Node_File:
         root = root.to_bytes(8, 'big')
         next_node_id = next_node_id.to_bytes(8, 'big')
         header = magic_number + root + next_node_id
-        header += b'\x00' * (512 - len(header))
+        header += b'\x00' * (NODE_SIZE - len(header))
         
         self.data = header
         self.write()
@@ -54,7 +55,7 @@ class Node_File:
         children_bytes = b''.join(child.to_bytes(8, 'big') for child in children) + b'\x00' * ((160 - len(children)))
         
         node = block_id_bytes + parent_id_bytes + num_keys_bytes + keys_bytes + values_bytes + children_bytes
-        node += b'\x00' * (512 - len(node))
+        node += b'\x00' * (NODE_SIZE - len(node))
         
         self.data = node
         self.write()
@@ -92,9 +93,9 @@ class Node_File:
         return self.data
 
     @staticmethod
-    def read_header(file, location):
-        file.seek(location)
-        data = file.read(512)
+    def read_header(file, location=0):
+        file.seek(location * NODE_SIZE)
+        data = file.read(NODE_SIZE)
 
         root = int.from_bytes(data[8:16], 'big')
         next_node_id = int.from_bytes(data[16:24], 'big')
@@ -106,8 +107,8 @@ class Node_File:
     
     @staticmethod
     def read_node(file, location):
-        file.seek(location)
-        data = file.read(512)
+        file.seek(location * NODE_SIZE)
+        data = file.read(NODE_SIZE)
 
         if data[:8] == MAGIC_NUMBER.to_bytes(8, byteorder='big'):
             return Node_File.read_header(data)
@@ -129,3 +130,21 @@ class Node_File:
             'values': values,
             'children': children
         }
+    
+    @staticmethod
+    def to_data(node):
+        if node['header']:
+            root = node['root'].to_bytes(8, 'big')
+            next_node_id = node['next_node'].to_bytes(8, 'big')
+            return MAGIC_NUMBER.to_bytes(8, byteorder='big') + root + next_node_id + b'\x00' * (NODE_SIZE - 24)
+        
+        block_id = node['block_id'].to_bytes(8, 'big')
+        parent_id = node['parent_id'].to_bytes(8, 'big')
+        num_keys = node['num_keys'].to_bytes(8, 'big')
+        
+        keys = b''.join(key.to_bytes(8, 'big') for key in node['keys']) + b'\x00' * (152 - len(node['keys']))
+        values = b''.join(value.to_bytes(8, 'big') for value in node['values']) + b'\x00' * (152 - len(node['values']))
+        children = b''.join(child.to_bytes(8, 'big') for child in node['children']) + b'\x00' * (160 - len(node['children']))
+        
+        length = len(block_id + parent_id + num_keys + keys + values + children)
+        return block_id + parent_id + num_keys + keys + values + children + b'\x00' * (NODE_SIZE - length)

@@ -19,3 +19,12 @@
 
 11/28   16:00:  I want to finish the implementation of index_utils.py in this session, or get close to it so that I can start working on the functionality of the B-Tree soon. It is 
                 also Thanksgiving today though so I might not have enough time today. I haven't really had any thoughts about the project since last night.
+
+11/28   17:21:  * I am using the clock replacement policy in my memory scheme to maintain only 3 frames at once.
+                * Now I'm thinking about just having the id represent it's respective location * NODE_SIZE as it's not like we're going to be changing the ids, just which node is pointing to which.
+                * I'm going to have node ids starting from 1 and then going on further because technically they will be at position 1 in the file.
+                I'm going to take a break from this as I have now implemented the bullets above, and can now add nodes.
+                I think it would be more optimal currently if I just make node_utils only contain static methods, where I can then just input the data directly to the method in a 
+                    dictionary, as that would probably be more convinient for writing to files because that means no more having to create a new object every time I want to write to the file. 
+                    A possible solution for this would be to just imput the data as a field, as the data already contains the block_id. This way we can just have the add_node method in index_utils to add a new node, and edit previous nodes using adjust_header() or adjust_node() and add a block_id parameter to know which node we are adjusting.
+                    I'm probably going to be back later today after dinner and a quick run, so I'll probably work on that, which then I just need to translate this functionality to index_utils, and then I can probably start working on btree_utils.py.
