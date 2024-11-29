@@ -30,3 +30,6 @@
                     I'm probably going to be back later today after dinner and a quick run, so I'll probably work on that, which then I just need to translate this functionality to index_utils, and then I can probably start working on btree_utils.py.
 
 11/28   19:18:  I'm back from Thanksgiving dinner and now I will start working on reworking node_utils.py. I will do this in a separate branch as I want to back it up in case.
+
+11/28   21:39:  * Ok I'm just going to create test classes to make sure that these methods work so far so I won't have to worry about debugging a huge mess later.
+                Ok all of node_utils.py is now tested to be working. I manually checked each test output in files by hand. This means that I can probably just start using index_utils without worrying about weird reading and writing errors to files. I might continue later today again at midnight, or I'll just take a break and enjoy Black Friday tomorrow. I think that index_utils is also almost done, so that is good. I'm expecting to be done with all of this utility by tomorrow.
