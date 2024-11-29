@@ -77,3 +77,5 @@ class Index_File:
         header['next_node'] += 1
         Node_File(file_path=self.file, data=header.to_data()).adjust_header(next_node_id=header['next_node'])
         return next_node_id
+    
+    

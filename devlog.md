@@ -28,3 +28,5 @@
                     dictionary, as that would probably be more convinient for writing to files because that means no more having to create a new object every time I want to write to the file. 
                     A possible solution for this would be to just imput the data as a field, as the data already contains the block_id. This way we can just have the add_node method in index_utils to add a new node, and edit previous nodes using adjust_header() or adjust_node() and add a block_id parameter to know which node we are adjusting.
                     I'm probably going to be back later today after dinner and a quick run, so I'll probably work on that, which then I just need to translate this functionality to index_utils, and then I can probably start working on btree_utils.py.
+
+11/28   19:18:  I'm back from Thanksgiving dinner and now I will start working on reworking node_utils.py. I will do this in a separate branch as I want to back it up in case.
