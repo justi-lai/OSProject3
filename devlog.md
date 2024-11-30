@@ -33,3 +33,7 @@
 
 11/28   21:39:  * Ok I'm just going to create test classes to make sure that these methods work so far so I won't have to worry about debugging a huge mess later.
                 Ok all of node_utils.py is now tested to be working. I manually checked each test output in files by hand. This means that I can probably just start using index_utils without worrying about weird reading and writing errors to files. I might continue later today again at midnight, or I'll just take a break and enjoy Black Friday tomorrow. I think that index_utils is also almost done, so that is good. I'm expecting to be done with all of this utility by tomorrow.
+
+11/30   14:47:  I ended up not having any time yesterday to do work, so I'm going to push the schedule by one day. What is nice though is that index_utils shouldn't need any more 
+                functionality, so I can just start implementing the B-Tree already. My plan is to get B-Tree working today.
+                My current thoughts are to just basically instead of using an array to perform operations in the B-Tree, I can just use index_utils.py instead as the representation of the B-Tree, so that I'm only keeping up to 3 nodes in memory at once, and I can fetch nodes and edit nodes at once without having to worry about memory problems.
