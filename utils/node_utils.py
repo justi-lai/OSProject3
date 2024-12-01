@@ -7,10 +7,8 @@ NODE_SIZE = 512
 def write(file_path, data, location=0):
     if data is None:
         return False
-        # raise ValueError("No data to write")
     if file_path is None:
         return False
-        # raise ValueError("No file path provided")
     
     try:
         with open(file_path, 'r+b') as file:
@@ -21,7 +19,6 @@ def write(file_path, data, location=0):
             file.write(data)
     return True
 
-@staticmethod
 def init_header(file_path, root=0, next_node_id=1):
     magic_number = MAGIC_NUMBER.encode('utf-8')
     root_bytes = root.to_bytes(8, 'big')
@@ -36,7 +33,6 @@ def init_header(file_path, root=0, next_node_id=1):
         'next_node': next_node_id
     }
 
-@staticmethod
 def adjust_header(file_path, root=None, next_node_id=None):
     if root is not None:
         root_bytes = root.to_bytes(8, 'big')
@@ -47,7 +43,6 @@ def adjust_header(file_path, root=None, next_node_id=None):
         write(file_path, next_node_id_bytes, 16)
     return
 
-@staticmethod
 def init_node(file_path, block_id, parent_id, num_keys, keys, values, children):
     block_id_bytes = block_id.to_bytes(8, 'big')
     parent_id_bytes = parent_id.to_bytes(8, 'big')
@@ -71,7 +66,6 @@ def init_node(file_path, block_id, parent_id, num_keys, keys, values, children):
         'children': children
     }
 
-@staticmethod
 def adjust_node(file_path, block_id, parent_id=None, num_keys=None, keys=None, values=None, children=None):
     if parent_id is not None:
         parent_id_bytes = parent_id.to_bytes(8, 'big')
@@ -94,7 +88,13 @@ def adjust_node(file_path, block_id, parent_id=None, num_keys=None, keys=None, v
         write(file_path, children_bytes, block_id * NODE_SIZE + 328)
     return
 
-@staticmethod
+def overwrite_node(file_path, node):
+    if node['header']:
+        adjust_header(file_path, node['root'], node['next_node'])
+    else:
+        adjust_node(file_path, node['block_id'], node['parent_id'], node['num_keys'], node['keys'], node['values'], node['children'])
+    return
+
 def read_header(data):
     root = int.from_bytes(data[8:16], 'big')
     next_node_id = int.from_bytes(data[16:24], 'big')
@@ -104,7 +104,6 @@ def read_header(data):
         'next_node': next_node_id
     }
 
-@staticmethod
 def read_node(file_path, location):
     result = None
     with open(file_path, 'rb') as file:
@@ -133,7 +132,6 @@ def read_node(file_path, location):
             }
     return result
 
-@staticmethod
 def to_data(node):
     if node['header']:
         root = node['root'].to_bytes(8, 'big')
