@@ -1,3 +1,5 @@
 *.idx
 tests/
 __pycache__/
+indexes/*
+!indexes/.gitkeep

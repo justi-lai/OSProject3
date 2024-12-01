@@ -41,3 +41,6 @@
 
 11/30   22:43:  I'm going to create a branch and try to revamp index_utils so that it's easier to manage right now. I'm going to try to make it similar to the ArrayList class in Java
                 so that I can easily create a B-Tree algorithm. I believe this to be the easiest way, as I can manage making the utils into a List type class, but trying to make the B-Tree to work with the current system is too difficult for me right now. The main problem that I am seeing is that I'm trying to currently use the object references to my advantage by sending them around methods, but the ones that stay in memory are not consistent, so problems will arise where some may just go missing and not get updated. Other times, random key value pairs just don't match up correctly.
+
+12/01   00:45:  I'm tired, I'm going to go sleep. Right now, I'm just starting to combine both index_utils and btree into one, and I'm going to try to work with that. Lots of errors 
+                right now.

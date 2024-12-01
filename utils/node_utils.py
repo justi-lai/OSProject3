@@ -120,6 +120,7 @@ def read_node(file_path, location):
             keys = [int.from_bytes(data[24 + i * 8:32 + i * 8], 'big') for i in range(num_keys)]
             values = [int.from_bytes(data[176 + i * 8:184 + i * 8], 'big') for i in range(num_keys)]
             children = [int.from_bytes(data[328 + i * 8:336 + i * 8], 'big') for i in range(20)]
+            trimmed_children = [x for x in children if x != 0]
 
             result = {
                 'header': False,
@@ -128,7 +129,7 @@ def read_node(file_path, location):
                 'num_keys': num_keys,
                 'keys': keys,
                 'values': values,
-                'children': children
+                'children': trimmed_children
             }
     return result
 
