@@ -44,3 +44,6 @@
 
 12/01   00:45:  I'm tired, I'm going to go sleep. Right now, I'm just starting to combine both index_utils and btree into one, and I'm going to try to work with that. Lots of errors 
                 right now.
+
+12/01   15:47:  I didn't put this down last night, but the arraylist idea would not work that well. The reason for that is that I need to keep track of multiple nodes at different 
+                times, and trying to make it into an arraylist just adds an extra layer of complexity, as opposed to just baking the entire btree methods into the memory. I'm going to just continue trying to get this implementation to work.
