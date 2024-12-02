@@ -1,7 +1,4 @@
 *.idx
-tests/
+*.csv
+*.txt
 __pycache__/
-indexes/*
-!indexes/.gitkeep
-csv/*
-!csv/.gitkeep
