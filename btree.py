@@ -337,10 +337,17 @@ class BTree:
             print("Empty tree...")
             return
         node = self.get_node(block_id)
-        print("Block", block_id, " ||  Level", level, ":", node.keys, node.values, " ||  Children:", node.children)
-        if not node.leaf:
-            for child in node.children:
-                self._print_tree(child, level + 1)
+        if node.leaf:
+            for i in range(node.num_keys):
+                print(f"Key: {node.keys[i]}, Value: {node.values[i]}")
+        else:
+            i = 0
+            while i < node.num_keys:
+                self._print_tree(node.children[i], level + 1)
+                print(f"Key: {node.keys[i]}, Value: {node.values[i]}")
+                i += 1
+            if i < len(node.children):
+                self._print_tree(node.children[i], level + 1)
 
     def print_tree(self):
         self._print_tree(self.get_root().block_id, 0)

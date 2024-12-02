@@ -81,7 +81,7 @@ def main():
                 print(f"{file_name} does not exist.")
                 continue
             B.load(file_path)
-            print(f"{file_name} is open.")
+            print(f"{file_name} has been loaded.")
         
         elif choice == 6:
             if B is None:
