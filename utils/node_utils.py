@@ -19,6 +19,14 @@ def write(file_path, data, location=0):
             file.write(data)
     return True
 
+def has_header(file_path):
+    try:
+        with open(file_path, 'rb') as file:
+            data = file.read(8)
+            return data == MAGIC_NUMBER.encode('utf-8')
+    except:
+        return False
+
 def init_header(file_path, root=0, next_node_id=1):
     magic_number = MAGIC_NUMBER.encode('utf-8')
     root_bytes = root.to_bytes(8, 'big')

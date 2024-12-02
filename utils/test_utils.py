@@ -1,6 +1,6 @@
 import unittest
 import os
-import node_utils, index_utils
+import node_utils
 
 def test_path(name):
     return os.path.join(os.path.dirname(os.path.dirname(__file__)), 'tests', name)
@@ -129,31 +129,6 @@ class TestNodeUtils(unittest.TestCase):
             file.seek(512)
             data = file.read(512)
             self.assertEqual(node_utils.to_data(test_node), data)
-
-class TestIndexUtils(unittest.TestCase):
-    def test_read_from_location(self):
-        pass
-
-    def test_check_memory(self):
-        pass
-
-    def test_check_memory_fv(self):
-        pass
-
-    def test_get_node(self):
-        pass
-
-    def test_get_node_fv(self):
-        pass
-
-    def test_get_header(self):
-        pass
-
-    def test_get_root(self):
-        pass
-
-    def test_add_node(self):
-        pass
 
 if __name__ == '__main__':
     unittest.main()

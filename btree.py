@@ -1,5 +1,6 @@
 import utils.node_utils as nu
 import os
+import csv
 
 MEMORY_SIZE = 3
 
@@ -116,10 +117,15 @@ class BTree:
         return file
 
     def _init_header(self):
-        nu.init_header(self.file_path)
-        self._clock_policy()
-        self.memory[self.clock] = HeaderNode(self.file_path)
-        self.memory[self.clock].load()
+        if nu.has_header(self.file_path):
+            self._clock_policy()
+            self.memory[self.clock] = HeaderNode(self.file_path)
+            self.memory[self.clock].load()
+        else:
+            nu.init_header(self.file_path)
+            self._clock_policy()
+            self.memory[self.clock] = HeaderNode(self.file_path)
+            self.memory[self.clock].load()
     
     def get_header(self):
         index = self._in_memory(0)
@@ -198,6 +204,44 @@ class BTree:
         header = self.get_header()
         header.root = root
         header.save()
+
+    def load(self, file_path):
+        with open(file_path, 'r') as file:
+            csv_file = csv.reader(file)
+            for row in csv_file:
+                if not row or len(row) <2:
+                    continue
+                try:
+                    search = self.search_key(int(row[0]))
+                    if search is None:
+                        self.insert(int(row[0]), int(row[1]))
+                        print(f"{row[0]}:{row[1]} inserted.")
+                    else:
+                        print(f"Key {row[0]} already exists.")
+                except ValueError:
+                    continue
+    
+    def _extract_helper(self, node, csv_file):
+        node_id = node.block_id
+        node = self.get_node(node.block_id)
+        if node.leaf:
+            for i in range(node.num_keys):
+                csv_file.writerow([node.keys[i], node.values[i]])
+        else:
+            i = 0
+            while i < node.num_keys:
+                self._extract_helper(self.get_node(node.children[i]), csv_file)
+                node = self.get_node(node_id)
+                csv_file.writerow([node.keys[i], node.values[i]])
+                i += 1
+            if i < len(node.children):
+                self._extract_helper(self.get_node(node.children[i]), csv_file)
+
+    def extract(self, file_path):
+        with open(file_path, 'w') as file:
+            csv_file = csv.writer(file)
+            root = self.get_root()
+            self._extract_helper(root, csv_file)    
     
     def split_child(self, parent_id, child_index):
         degree = self.degree
@@ -221,7 +265,7 @@ class BTree:
         child2.num_keys = len(child2.keys)
         if not child1.leaf:
             child2.children = child1.children[degree:]
-            child1.children = child1.children[:degree - 1]
+            child1.children = child1.children[:degree]
             child2.leaf = False
         child1.save()
         child2.save()
@@ -270,11 +314,30 @@ class BTree:
                 self.get_root()
                 self.insert_non_full(new_root, key, value)
             else:
-                self.insert_non_full(root.block_id, key, value)
+                self.insert_non_full(root_id, key, value)
+    
+    def search_key(self, key, block_id=None):
+        if block_id is None:
+            block_id = self.get_header().root
+        if block_id == 0:
+            return None
+        node = self.get_node(block_id)
+        i = 0
+        while i < node.num_keys and key > node.keys[i]:
+            i += 1
+        if i < node.num_keys and key == node.keys[i]:
+            return node.values[i]
+        if node.leaf:
+            return None
+        return self.search_key(key, node.children[i])
+        
     
     def _print_tree(self, block_id, level):
+        if block_id == 0:
+            print("Empty tree...")
+            return
         node = self.get_node(block_id)
-        print("Level", level, ":", node.keys, node.values)
+        print("Block", block_id, " ||  Level", level, ":", node.keys, node.values, " ||  Children:", node.children)
         if not node.leaf:
             for child in node.children:
                 self._print_tree(child, level + 1)
@@ -282,13 +345,8 @@ class BTree:
     def print_tree(self):
         self._print_tree(self.get_root().block_id, 0)
 
-def main():
-    B = BTree('test', 3)
-
-    for i in range(20):
-        B.insert(i, 2 * i)
-    
-    B.print_tree()
-
-if __name__ == '__main__':
-    main()
+    def close(self):
+        for i in range(MEMORY_SIZE):
+            if self.memory[i] is not None:
+                self._write_to_file(self.memory[i])
+        return
