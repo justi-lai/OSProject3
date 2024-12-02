@@ -104,6 +104,12 @@ def read_header(data):
         'next_node': next_node_id
     }
 
+def get_next_node_id(file_path):
+    with open(file_path, 'rb') as file:
+        file.seek(16)
+        next_node_id = int.from_bytes(file.read(8), 'big')
+        return next_node_id
+
 def read_node(file_path, location):
     result = None
     with open(file_path, 'rb') as file:
