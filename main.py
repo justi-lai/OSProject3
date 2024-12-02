@@ -4,6 +4,7 @@ import os
 DEGREE = 10
 
 def main():
+    initiate_directory()
     B = None
     while True:
         choice = menu()
@@ -107,6 +108,12 @@ def main():
             if B is not None:
                 B.close()
             break
+
+def initiate_directory():
+    if not os.path.exists(os.path.join(os.path.dirname(__file__), 'indexes')):
+        os.makedirs(os.path.join(os.path.dirname(__file__), 'indexes'))
+    if not os.path.exists(os.path.join(os.path.dirname(__file__), 'csv')):
+        os.makedirs(os.path.join(os.path.dirname(__file__), 'csv'))
 
 def menu():
     _display_menu()
