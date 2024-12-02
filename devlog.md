@@ -51,3 +51,6 @@
 12/01   18:38:  I got the BTree to work for insert. The rest is just getting search, and then the rest should just be simple pulling and just the load. They should be pretty easy 
                 to do, so I'm not really thinking about it right now.
                 I fixed the main problem of having nodes going in and out of memory by just simply referencing the node before I need to use it, and then anytime another node gets used, if I want to go back to the previous node, I have to make sure it's in memory again. This way, everything is in memory when it is needed.
+
+12/02   13:13:  I forgot to add the previous devlog, so I'll just combine the two here. I finished the BTree and created the console ui last night. Today, I just changed a 
+                little ui stuff and made the search_key actually output the right format because I forgot to last night. I also just finished testing the final project, so this project is pretty much ready to go.
