@@ -54,3 +54,6 @@
 
 12/02   13:13:  I forgot to add the previous devlog, so I'll just combine the two here. I finished the BTree and created the console ui last night. Today, I just changed a 
                 little ui stuff and made the search_key actually output the right format because I forgot to last night. I also just finished testing the final project, so this project is pretty much ready to go.
+
+12/04   17:30:  Finished the README.md file. I forgot to start the session here, but there was really nothing to write anyways as it is just the readme. Everything is now done and 
+                will be turned in.
